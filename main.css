@@ -1,0 +1,92 @@
+.states {
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: round;
+}
+
+.states-choropleth {
+  fill: #ccc;
+}
+.textHint {
+    font-size:18px;
+    font-weight: 500;
+    position: absolute;
+    width: 320px;
+    margin-left: 180px;
+    margin-top: 840px;
+    border: solid grey 1px;
+    padding: 15px;
+    color: olive;
+    display: none;
+}
+.inputField {
+    position: absolute;
+    margin-left: 740px;
+    margin-top: 920;
+    width: 500px;
+    font-size: 30px;
+    font-weight: bold;
+    display: none;
+    padding: 10px 20px 20px 65px;
+    background-color: greenyellow;
+}
+.tooltip_key {
+  font-weight: bold;
+}
+
+.tooltip_value {
+  margin-left: 20px;
+  float: right;
+}
+#tooltip {
+  position: absolute;
+  background-color: #E9FFD8;
+  opacity: 0.75;
+  padding: 16px;
+  border: 1.5px dashed;
+  display: none;
+  width: 250px;
+}
+
+.switchBTN {
+    color: #ffae00;
+    background: transparent;
+    padding: 20px 50px;
+    position: absolute;
+    margin-left:900px;
+    margin-top: 850px;
+    font-weight: bold;
+    display: none;
+    cursor: pointer;
+}
+.homeBTN {
+    color: steelblue;
+    background: transparent;
+    padding: 20px 50px;
+    position: absolute;
+    margin-left:1400px;
+    margin-top: 700px;
+    font-weight: bold;
+    display: none;
+    cursor: pointer;
+}
+.textAnnotation {
+    font-size:18px;
+    font-weight: 500;
+    position: absolute;
+    width: 550px;
+    margin-left: 1330px;
+    margin-top: 480px;
+}
+.bar {
+    fill: steelblue;
+}
+
+.state-border {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 0.8px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}

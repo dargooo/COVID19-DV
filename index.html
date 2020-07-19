@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head> 
+	<title>COVID-19</title>
+	<!-- Refer to: https://gist.github.com/mbostock/4090848 -->
+	<script src='https://d3js.org/d3.v5.min.js'></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<link href="main.css" rel="stylesheet" media="all">
+	<style>
+	body {
+	  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	  width: 2000px;
+	  height: 1500px;
+	  position: relative;
+	}
+	</style>
+</head> 
+ <body>
+	<h1 style="font-family:Comic Sans MS, Comic Sans, cursive;top:30px;left:100px;position:relative;">COVID-19 US Case Map</h1>
+	<svg id="main" width="1300" height="700">
+	</svg>
+	<svg id="bar" width="100" height="800" style="right:0">
+    </svg>
+	<div id="arrow" style="display:none;left:1250px;position:absolute;">
+		<span style='font-size:50px;color:#9FC738;'>&#8594;</span>
+	</div>
+	<button class="homeBTN">Return to Home</button>
+	
+	<p class="textHint">Hint: With this scense You can enter the start and end years between 1997 to 2015 to regenerate the graph.
+	    Also, you can click Switch to button to switch bar graph between Income vs GDP and the ratio graph.
+	</p>
+	<div id="tooltip">
+			<div id="tip-state">Alabama</div>
+			<div id="tip-case">Confirmed: 12461</div>
+			<div id="tip-death">Deaths: 12461</div>
+			<div>
+				<button id="btn-county" style="display:none">&gt;&gt; Details of Alabama Counties</button>
+			</div>
+			<div>
+				<button id="btn-growth" style="display:none">&gt;&gt; Growth of Alabama Cases</button>
+			</div>
+	</div>
+	
+	<div id="canvas-svg"></div>
+	<script async type="text/javascript" src="main.js"></script>
+</body>
+</html>
