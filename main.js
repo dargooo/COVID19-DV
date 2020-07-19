@@ -1,12 +1,12 @@
 (async function() {
-    const gdpData = await d3.csv('https://raw.githubusercontent.com/kirkzhang49/datavirtualization/master/gdp_by_state.csv');
-
 	const idMap = d3.map();
 	const stateMap = d3.map();
+	/* id - shortname, state */
 	await d3.csv("https://gist.githubusercontent.com/dantonnoriega/bf1acd2290e15b91e6710b6fd3be0a53/raw/11d15233327c8080c9646c7e1f23052659db251d/us-state-ansi-fips.csv", function(d) {
 		stateMap.set(d.stname, [d[" stusps"]]);
 		idMap.set(+d[" st"], d.stname);
 	});
+	/* state - confirmed, deaths */
 	await d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/07-17-2020.csv", function(d) {
 	    if (stateMap.has(d.Province_State)) {
 			stateMap.get(d.Province_State).push(d.Confirmed);
@@ -15,14 +15,53 @@
 	  	  console.log("No " + d.Province_State + " in the map.");
 	    }
 	});
+	/* US total case growth */
+	tg_data = await d3.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv");
+	var x = d3.scaleLinear().domain([0,180]).range([0,400]);
+	var y = d3.scaleLinear().domain([0,3800000]).range([600,0]);
+	// axis
+	d3.select("#lines").append("g").attr("transform", "translate(10,600)").call(d3.axisBottom(x));
+	d3.select("#lines").append("g").attr("transform", "translate(410,0)").call(d3.axisRight(y));
+	//lines
+	var lineCase = d3.line().x(function(d, i) { return x(i); }).y(function(d) { return y(d.cases); }).curve(d3.curveMonotoneX);
+	var lineDeath = d3.line().x(function(d, i) { return x(i); }).y(function(d) { return y(d.deaths); }).curve(d3.curveMonotoneX);
+	d3.select("#lines").append("path")
+		.attr("transform", "translate(10,0)")
+	    .datum(tg_data)
+		.style("fill", "none")
+		.style("stroke", "#E6BE6C")
+		.style("stroke-width", 3)
+	    .attr("d", lineCase);
+	d3.select("#lines").append("path")
+		.attr("transform", "translate(10,0)")
+    	.datum(tg_data)
+		.style("fill", "none")
+		.style("stroke", "#DB7D6F")
+		.style("stroke-width", 3)
+    	.attr("d", lineDeath);
 
-    
+//	d3.select("#lines").append("g").attr("transform", "translate(10,0)")
+//		.selectAll("dot").data(tg_data).enter().append("circle")
+//		.attr("cx", function (d,i) { return x(i); } )
+//    	.attr("cy", function (d) { return y(d.cases); } )
+//    	.attr("r", 1.5)
+//    	.style("fill", "#794993");
+//
+//	d3.select("#lines").append("g").attr("transform", "translate(10,0)")
+//		.selectAll("dot").data(tg_data).enter().append("circle")
+//		.attr("cx", function (d,i) { return x(i); } )
+//    	.attr("cy", function (d) { return y(d.deaths); } )
+//    	.attr("r", 1.5)
+//    	.style("fill", "#D16454");
+
+
+	
     renderMap();
 
     function renderMap() {
 		var color = d3.scaleLinear()
 			.domain([1000,420000])
-			.range(["#E7DBF3", "#240148"]);
+			.range(["#E7DBF3", "#1A0035"]);
 
 		var svg_main = d3.select("#main");
 		var svg_bar =  d3.select("#bar");
@@ -60,30 +99,30 @@
 				.text(function(d){return "hello";})
 		  	    .attr("fill", function(d, i) {
 		  	        var id = +d.id;
-		  	        var sn = idMap.get(id);
-					if (stateMap.get(sn)) {
-						 d.num = stateMap.get(sn)[1];
+		  	        var state = idMap.get(id);
+					if (stateMap.get(state)) {
+						 d.num = stateMap.get(state)[1];
 					} else {
 						d.num = 0;
 					}
-					console.log("i = " + i + ", id = " + id + ": " + sn + ": " + d.num);
+					console.log("i = " + i + ", id = " + id + ": " + state + ": " + d.num);
 		  	        return color(d.num);
 		  	    })
 		  	    .attr("d", path)
 		  		.on('mousemove', function(d){
 					 if (!still) {
 						var id = +d.id;
-						var sn = idMap.get(id);
+						var state = idMap.get(id);
 		  	        	$(this).attr("fill-opacity", "0.6");
 		  	        	$(this).attr("stroke", "#D3F381");
 						$(this).attr("stroke-width", "4px");
-						d3.select("#tip-state").text(sn);
-						d3.select("#tip-case").text("Confirmed: " + stateMap.get(sn)[1]);
-						d3.select("#tip-death").text("Deaths: " + stateMap.get(sn)[2]);
-						d3.select("#btn-county").text(">> Detail of " + sn + " Counties");
-						d3.select("#btn-growth").text(">> Growths of " + sn + " Cases");
+						d3.select("#tip-state").text(state);
+						d3.select("#tip-case").text("Confirmed: " + stateMap.get(state)[1]);
+						d3.select("#tip-death").text("Deaths: " + stateMap.get(state)[2]);
+						d3.select("#btn-county").text(">> Detail of " + state + " Counties");
+						d3.select("#btn-growth").text(">> Growths of " + state + " Cases");
 
-						var rect = d3.select("#" + stateMap.get(sn)[0].substring(1));
+						var rect = d3.select("#" + stateMap.get(state)[0].substring(1));
 						d3.select("#arrow").style("top", (55 + parseInt(rect.attr("y"))) + "px");
 		  	        	$("#arrow").show();
 		  	        	$("#tooltip").show();
