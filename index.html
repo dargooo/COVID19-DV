@@ -13,21 +13,20 @@
 	  width: 1300px;
 	  height: 1500px;
 	  position: relative;
+	   z-index:-1;
 	}
 	</style>
 </head> 
  <body>
 	<h1 style="font-family:Comic Sans MS, Comic Sans, cursive;top:0px;left:100px;position:relative;">COVID-19 US Case Map</h1>
-	<svg id="main" width="1100" height="700" style="top:80px; position:absolute">
-	</svg>
-	<svg id="bar" width="100" height="800" style="left:5px; position:absolute">
-    </svg>
+	<svg id="main" width="1100" height="700" style="top:80px; position:absolute"></svg>
+	<svg id="bar" width="100" height="800" style="left:5px; position:absolute"></svg>
 	<div id="arrow" style="display:none; left:75px; position:absolute;">
 		<span style='font-size:50px;color:#9FC738;'>&#8592;</span>
 	</div>
-
-	<svg id="lines" width="500" height="625" style="left:850px; top:225px;  position:absolute; z-index:-1">
-    </svg>
+	<div id="line-state" style="left:1160px; top:540px; position:absolute; width:200px; text-align:right"></div>
+	<div id="focus-text" style="opacity:0; left:1160px; top:570px; position:absolute; width:200px; font-size:15px;  text-align:right"></div>
+	<svg id="lines" width="900" height="275" style="left:550px; top:600px;  position:absolute; z-index:0"></svg>
 	<button class="homeBTN">Return to Home</button>
 	
 	<div id="tooltip">
