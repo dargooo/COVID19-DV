@@ -29,6 +29,7 @@
 		var cur_data = states_data.filter(function(d) { return d.state == state; })
 		svg_line.selectAll("path").remove();
 		svg_line.selectAll("g").remove();
+		svg_line.selectAll("rect").remove();
 
 		d3.select("#line-state").html(state);
 
@@ -45,21 +46,21 @@
 		svg_line.append("path").datum(cur_data)
         	.attr("transform", "translate(10,0)")
         	.style("fill", "none")
-        	.style("stroke", "#EED9AD")
+        	.style("stroke", "#ECC26C")
         	.style("stroke-width", 5)
         	.attr("d", lineCase)
 		svg_line.append("path").datum(cur_data)
 			.attr("transform", "translate(10,0)")
 			.style("fill", "none")
-			.style("stroke", "#DB7D6F")
-			.style("stroke-width", 3)
+			.style("stroke", "#D18479")
+			.style("stroke-width", 5)
     		.attr("d", lineDeath);
 
 		var focus = svg_line
 		   .append('g')
 		   .append('circle')
 		   .style("fill", "#F4981C")
-		   .attr('r', 7)
+		   .attr('r', 8)
 		   .style("opacity", 0)
 		var focusText = d3.select("#focus-text");
 
@@ -80,27 +81,9 @@
  		   focusText.style("opacity", 0)
  		 }
 
-
-
-		//dots
-//		svg_line.append("g").attr("transform", "translate(10,0)")
-//			.selectAll("dot").data(cur_data).enter().append("circle")
-//			.attr("cx", function (d,i) { return x(parseTime(d.date)); } )
-//    		.attr("cy", function (d) { return y(d.cases); } )
-//    		.attr("r", 3)
-//    		.style("opacity", 0.5)
-//    		.style("fill", "#E6BE6C");
-//		svg_line.append("g").attr("transform", "translate(10,0)")
-//			.selectAll("dot").data(cur_data).enter().append("circle")
-//			.attr("cx", function (d,i) { return x(parseTime(d.date)); } )
-//    		.attr("cy", function (d) { return y(d.deaths); } )
-//    		.attr("r", 2.5)
-//    		.style("opacity", 0.5)
-//    		.style("fill", "#DB5844");
-
 		// axis
-		svg_line.append("g").attr("transform", "translate(10,250)").call(d3.axisBottom(x)).style("stroke-width",2);
-		svg_line.append("g").attr("transform", "translate(810,0)").call(d3.axisRight(y)).style("stroke-width",2);
+		svg_line.append("g").attr("transform", "translate(10,250)").call(d3.axisBottom(x)).style("stroke-width",2).style("font-size","15px");
+		svg_line.append("g").attr("transform", "translate(810,0)").call(d3.axisRight(y)).style("stroke-width",2).style("font-size","12px");
 	}
 
 
@@ -171,7 +154,7 @@
 						d3.select("#btn-growth").text(">> Growths of " + state + " Cases");
 
 						var rect = d3.select("#" + stateMap.get(state)[0].substring(1));
-						d3.select("#arrow").style("top", (55 + parseInt(rect.attr("y"))) + "px");
+						d3.select("#arrow").style("top", (62 + parseInt(rect.attr("y"))) + "px");
 		  	        	$("#arrow").show();
 		  	        	$("#tooltip").show();
 		
