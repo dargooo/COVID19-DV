@@ -15,49 +15,81 @@
 	  	  console.log("No " + d.Province_State + " in the map.");
 	    }
 	});
-	/* US total case growth */
-	tg_data = await d3.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv");
-	var x = d3.scaleLinear().domain([0,180]).range([0,400]);
-	var y = d3.scaleLinear().domain([0,3800000]).range([600,0]);
-	// axis
-	d3.select("#lines").append("g").attr("transform", "translate(10,600)").call(d3.axisBottom(x));
-	d3.select("#lines").append("g").attr("transform", "translate(410,0)").call(d3.axisRight(y));
-	//lines
-	var lineCase = d3.line().x(function(d, i) { return x(i); }).y(function(d) { return y(d.cases); }).curve(d3.curveMonotoneX);
-	var lineDeath = d3.line().x(function(d, i) { return x(i); }).y(function(d) { return y(d.deaths); }).curve(d3.curveMonotoneX);
-	d3.select("#lines").append("path")
-		.attr("transform", "translate(10,0)")
-	    .datum(tg_data)
-		.style("fill", "none")
-		.style("stroke", "#E6BE6C")
-		.style("stroke-width", 3)
-	    .attr("d", lineCase);
-	d3.select("#lines").append("path")
-		.attr("transform", "translate(10,0)")
-    	.datum(tg_data)
-		.style("fill", "none")
-		.style("stroke", "#DB7D6F")
-		.style("stroke-width", 3)
-    	.attr("d", lineDeath);
 
-//	d3.select("#lines").append("g").attr("transform", "translate(10,0)")
-//		.selectAll("dot").data(tg_data).enter().append("circle")
-//		.attr("cx", function (d,i) { return x(i); } )
-//    	.attr("cy", function (d) { return y(d.cases); } )
-//    	.attr("r", 1.5)
-//    	.style("fill", "#794993");
-//
-//	d3.select("#lines").append("g").attr("transform", "translate(10,0)")
-//		.selectAll("dot").data(tg_data).enter().append("circle")
-//		.attr("cx", function (d,i) { return x(i); } )
-//    	.attr("cy", function (d) { return y(d.deaths); } )
-//    	.attr("r", 1.5)
-//    	.style("fill", "#D16454");
+	/*     LINE    */
+	const states_data = await d3.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv");
+	var svg_line = d3.select("#lines");
+	var parseTime = d3.timeParse("%Y-%m-%d");
+	var x = d3.scaleTime().rangeRound([0, 800]).domain(d3.extent(states_data, function(d){ return parseTime(d.date); }));
+	var y = d3.scaleLinear().domain([0,430000]).range([250,0]);
+	var lineCase = d3.line().x(function(d, i) { return x(parseTime(d.date)); }).y(function(d) { return y(parseInt(d.cases)); });
+	var lineDeath = d3.line().x(function(d, i) { return x(parseTime(d.date)); }).y(function(d) { return y(parseInt(d.deaths)); });
+
+	function renderLines(state) {
+		var cur_data = states_data.filter(function(d) { return d.state == state; })
+		svg_line.selectAll("path").remove();
+		svg_line.selectAll("g").remove();
+		svg_line.selectAll("rect").remove();
+
+		d3.select("#line-state").html(state);
+
+		var bisect = d3.bisector(function(d) { return d.date; }).left;
+		svg_line.append('rect')
+    		.style("fill", "none")
+    		.style("pointer-events", "all")
+    		.attr('width', "900px")
+    		.attr('height', "275px")
+    		.on('mouseover', mouseover)
+    		.on('mousemove', mousemove)
+    		.on('mouseout', mouseout);
+		// lines
+		svg_line.append("path").datum(cur_data)
+        	.attr("transform", "translate(10,0)")
+        	.style("fill", "none")
+        	.style("stroke", "#ECC26C")
+        	.style("stroke-width", 5)
+        	.attr("d", lineCase)
+		svg_line.append("path").datum(cur_data)
+			.attr("transform", "translate(10,0)")
+			.style("fill", "none")
+			.style("stroke", "#D18479")
+			.style("stroke-width", 5)
+    		.attr("d", lineDeath);
+
+		var focus = svg_line
+		   .append('g')
+		   .append('circle')
+		   .style("fill", "#F4981C")
+		   .attr('r', 8)
+		   .style("opacity", 0)
+		var focusText = d3.select("#focus-text");
+
+		function mouseover() {
+ 		   focus.style("opacity", 1)
+ 		   focusText.style("opacity",1)
+ 		 }
+		function mousemove() {
+    		var x0 = x.invert(d3.mouse(this)[0]).toISOString().substring(0,10);
+    		var i = bisect(cur_data, x0, 1);
+    		dd = cur_data[i];
+    		focus.attr("cx", x(parseTime(dd.date)) + 10)
+    			 .attr("cy", y(parseInt(dd.cases)));
+    		focusText.html(dd.date + " : " + dd.cases);
+    	}
+ 		 function mouseout() {
+ 		   focus.style("opacity", 0)
+ 		   focusText.style("opacity", 0)
+ 		 }
+
+		// axis
+		svg_line.append("g").attr("transform", "translate(10,250)").call(d3.axisBottom(x)).style("stroke-width",2).style("font-size","15px");
+		svg_line.append("g").attr("transform", "translate(810,0)").call(d3.axisRight(y)).style("stroke-width",2).style("font-size","12px");
+	}
 
 
-	
+
+	/*     MAP     */
     renderMap();
-
     function renderMap() {
 		var color = d3.scaleLinear()
 			.domain([1000,420000])
@@ -105,11 +137,10 @@
 					} else {
 						d.num = 0;
 					}
-					console.log("i = " + i + ", id = " + id + ": " + state + ": " + d.num);
 		  	        return color(d.num);
 		  	    })
 		  	    .attr("d", path)
-		  		.on('mousemove', function(d){
+		  		.on('mouseover', function(d){
 					 if (!still) {
 						var id = +d.id;
 						var state = idMap.get(id);
@@ -123,7 +154,7 @@
 						d3.select("#btn-growth").text(">> Growths of " + state + " Cases");
 
 						var rect = d3.select("#" + stateMap.get(state)[0].substring(1));
-						d3.select("#arrow").style("top", (55 + parseInt(rect.attr("y"))) + "px");
+						d3.select("#arrow").style("top", (62 + parseInt(rect.attr("y"))) + "px");
 		  	        	$("#arrow").show();
 		  	        	$("#tooltip").show();
 		
@@ -131,6 +162,7 @@
 		  	        	d3.select("#tooltip")
 		  	        	  .style("top", d3.event.layerY + "px")
 		  	        	  .style("left", (d3.event.layerX + 20) + "px");
+						 renderLines(state);
 					}
 		  	    })
 		  	    .on('mouseout', function() {
