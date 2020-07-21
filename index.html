@@ -10,7 +10,7 @@
 	<style>
 	body {
 	  font-family: Gill Sans, sans-serif;
-	  width: 1300px;
+	  width: 1500px;
 	  height: 1500px;
 	  position: relative;
 	   z-index:-1;
@@ -19,24 +19,28 @@
 </head> 
  <body>
 	<h1 style="font-family:Comic Sans MS, Comic Sans, cursive; top:0px; left:100px; position:relative; text-align:center">COVID-19 US Cases Summary</h1>
-	<svg id="main" width="1100" height="700" style="top:80px; position:absolute"></svg>
-	<svg id="bar" width="100" height="800" style="left:5px; position:absolute;"></svg>
+	<svg id="main" width="1450" height="1200" style="top:80px; position:absolute"></svg>
+	<svg id="bar" width="100" height="1200" style="left:5px; position:absolute;"></svg>
 	<div id="arrow" style="display:none; left:70px; position:absolute;">
 		<span style='font-size:50px;color:#9FC738;'>&#8592;</span>
 	</div>
-	<div id="line-state" style="left:1160px; top:540px; position:absolute; width:200px; text-align:right"></div>
-	<div id="focus-text" style="opacity:0; left:1160px; top:570px; position:absolute; width:200px; font-size:15px;  text-align:right"></div>
+	<div id="line-state" style="left:560px; top:780px; position:absolute; width:200px; text-align:left"></div>
+	<div id="focus-text" style="opacity:0; left:560px; top:810px; position:absolute; width:200px; font-size:15px;  text-align:left"></div>
 	<svg id="lines" width="900" height="275" style="left:550px; top:600px;  position:absolute; z-index:0"></svg>
 	
 	<div id="tooltip">
-			<div id="tip-state">Alabama</div>
-			<div id="tip-case">Confirmed: 12461</div>
-			<div id="tip-death">Deaths: 12461</div>
-			<div>
-				<button id="btn-county" style="display:none">&gt;&gt; Details of Alabama Counties</button>
-			</div>
+		<div id="tip-state">Alabama</div>
+		<div id="tip-case">Confirmed: 12461</div>
+		<div id="tip-death">Deaths: 12461</div>
+		<div>
+			<button id="btn-county" style="display:none">&gt;&gt; Details of Alabama Counties</button>
+		</div>
 	</div>
 	
+	<div style="left:5px; top:10px; position:absolute;">
+		<button id="btn-home" style="">&lt;&lt;  Return to Map</button>
+	</div>
+
 	<script async type="text/javascript" src="main.js"></script>
 </body>
 </html>
