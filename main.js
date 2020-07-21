@@ -16,20 +16,31 @@
 	    }
 	});
 
+	d3.select("#btn-home").on('click', function() {
+		console.log("return");
+		d3.select("#main").selectAll("*").remove();
+		$("#line-state").show();
+        $("#focus-text").show();
+        $("#lines").show();
+        $("#bar").show();
+		renderMap();
+	});
+
 	/*     LINE    */
 	const states_data = await d3.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv");
 	var svg_line = d3.select("#lines");
 	var parseTime = d3.timeParse("%Y-%m-%d");
-	var x = d3.scaleTime().rangeRound([0, 800]).domain(d3.extent(states_data, function(d){ return parseTime(d.date); }));
-	var y = d3.scaleLinear().domain([0,430000]).range([250,0]);
-	var lineCase = d3.line().x(function(d, i) { return x(parseTime(d.date)); }).y(function(d) { return y(parseInt(d.cases)); });
-	var lineDeath = d3.line().x(function(d, i) { return x(parseTime(d.date)); }).y(function(d) { return y(parseInt(d.deaths)); });
-
+	
 	function renderLines(state) {
 		var cur_data = states_data.filter(function(d) { return d.state == state; })
 		svg_line.selectAll("path").remove();
 		svg_line.selectAll("g").remove();
 		svg_line.selectAll("rect").remove();
+
+		var x = d3.scaleTime().rangeRound([0, 800]).domain(d3.extent(states_data, function(d){ return parseTime(d.date); }));
+		var y = d3.scaleLinear().domain([0,430000]).range([250,0]);
+		var lineCase = d3.line().x(function(d, i) { return x(parseTime(d.date)); }).y(function(d) { return y(parseInt(d.cases)); });
+		var lineDeath = d3.line().x(function(d, i) { return x(parseTime(d.date)); }).y(function(d) { return y(parseInt(d.deaths)); });
 
 		d3.select("#line-state").html(state);
 
@@ -82,7 +93,9 @@
  		 }
 
 		// axis
-		svg_line.append("g").attr("transform", "translate(10,250)").call(d3.axisBottom(x)).style("stroke-width",2).style("font-size","15px");
+		svg_line.append("g").attr("transform", "translate(10,250)")
+			.call(d3.axisBottom(x))
+			.style("stroke-width",2).style("font-size","15px");
 		svg_line.append("g").attr("transform", "translate(810,0)").call(d3.axisRight(y)).style("stroke-width",2).style("font-size","12px");
 	}
 
@@ -150,8 +163,7 @@
 						d3.select("#tip-state").text(state);
 						d3.select("#tip-case").text("Confirmed: " + stateMap.get(state)[1]);
 						d3.select("#tip-death").text("Deaths: " + stateMap.get(state)[2]);
-						d3.select("#btn-county").text(">> Detail of " + state + " Counties");
-						d3.select("#btn-growth").text(">> Growths of " + state + " Cases");
+						d3.select("#btn-county").on('click', function() {renderBar(state);}).text(">> Detail of " + state + " Counties");
 
 						var rect = d3.select("#" + stateMap.get(state)[0].substring(1));
 						d3.select("#arrow").style("top", (62 + parseInt(rect.attr("y"))) + "px");
@@ -179,7 +191,6 @@
 					 if (!still) {
 						 
 						 $("#btn-county").show();
-		  	        	 $("#btn-growth").show();
 						 d3.select("#tooltip").style("background-color", "#D3F381").style("opacity", 1);
 						 still = true;
 					 } else {
@@ -191,7 +202,6 @@
 						 $("#tooltip").hide();
 						  $("#arrow").hide();
 						 $("#btn-county").hide();
-                         $("#btn-growth").hide();
 						 d3.select("#tooltip").style("background-color", "#E9FFD8").style("opacity", 0.75);
 						 still = false;
 					 }
@@ -207,9 +217,8 @@
                 curSelect.attr("stroke", "white");
                 curSelect.attr("stroke-width", "0.8px");
 				$("#tooltip").hide();
-				 $("#arrow").hide();
+				$("#arrow").hide();
                 $("#btn-county").hide();
-                $("#btn-growth").hide();
 				d3.select("#tooltip").style("background-color", "#E9FFD8").style("opacity", 0.75);
                 still = false;
 			};
@@ -218,4 +227,111 @@
     }
 
 
+	/*      BAR      */
+	const counties_data = await d3.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/live/us-counties.csv");
+	function renderBar(state) {
+		var svg_main = d3.select("#main"); 
+		svg_main.selectAll("*").remove();
+		$("#line-state").hide();
+		$("#focus-text").hide();
+		$("#lines").hide();
+		$("#bar").hide();
+		var cur_data = counties_data.filter(function(d) { return d.state == state; })
+
+		console.log(d3.max(cur_data, function(d) { return parseInt(d.cases); }));
+
+		var left = 100, up = 50, height = 600;
+		var xx = d3.scaleBand().domain(cur_data.map(function(d,i) { return d.county; })).range([0, 1300]);
+		var yy = d3.scaleLinear().domain([0, d3.max(cur_data, function(d) { return parseInt(d.cases); })]).range([height, 0]);
+		var color = d3.scaleOrdinal(d3.schemePaired).domain(cur_data.map(function(d,i) { return d.county; }));
+
+		// transcript
+		svg_main.append("g")
+		    .attr("transform", "translate(" + left + "," + up + ")")
+		    .selectAll("rect").data(cur_data)
+		    .enter().append("rect")
+		    .attr("x", function(d) { return xx(d.county); })
+		    .attr("width", xx.bandwidth())
+			.attr("y", 0)
+		    .attr("height", "600px")
+			.attr("fill", "white")
+			.on('mouseover', mouseover)
+            .on('mousemove', function(d) { mousemove(d.cases, xx(d.county), yy(d.cases), xx.bandwidth()); })
+            .on('mouseout', mouseout);
+	
+		svg_main.append("g")
+		    .attr("transform", "translate(" + left + "," + up + ")")
+		    .selectAll("rect").data(cur_data)
+		    .enter().append("rect")
+		    .attr("x", function(d) { return xx(d.county); })
+		    .attr("width", xx.bandwidth())
+		    .attr("y", function(d) { return yy(d.cases); })
+		    .attr("height", function(d) { return height - yy(d.cases); })
+			.attr("fill", function(d) { return color(d.county); })
+			.on('mouseover', mouseover)
+            .on('mousemove', function(d) { mousemove(d.cases, xx(d.county), yy(d.cases), xx.bandwidth()); })
+            .on('mouseout', mouseout);
+	
+		console.log("xxd = " + xx.domain().length);
+		// axis
+		svg_main.append("g").attr("transform", "translate(" + left + "," + (up + height) + ")").call(d3.axisBottom(xx))
+			.style("stroke-width",2)
+			.style("font-size", function() {
+					var size = 1 + 1000 / xx.domain().length;
+                    if (size > 16)  size = 16;
+					return size + "px";
+                 })
+			.selectAll("text")
+			.style("text-anchor", "end")
+			.attr("dx", "-.8em")
+			.attr("dy", "-.55em")
+			.attr("transform", "rotate(-45)");
+
+		svg_main.append("g").attr("transform", "translate(" + left + "," + up + ")").call(d3.axisLeft(yy))
+			.style("stroke-width",2).style("font-size","12px");
+
+		// mouse
+		var focusNum = svg_main.append('g').append('text')
+      		.style("opacity", 0)
+      		.attr("text-anchor", "middle")
+      		.attr("alignment-baseline", "middle");
+
+		function mouseover() {
+ 		   //focus.style("opacity", 1)
+ 		   focusNum.style("opacity",1)
+ 		 }
+		function mousemove(cases, x, y, w) {
+			console.log(cases + ", " + x + ", " + y);
+    		focusNum.html(cases)
+				.attr("x", x + left + w / 2)
+				.attr("y", y + up - 10)
+				.style("font-size", function() {
+					if (w > 18)  return "18px";
+					else if (w < 12) return "12px";
+					else return w + "px";
+				});
+    	}
+ 		 function mouseout() {
+ 		   //focus.style("opacity", 0)
+ 		   focusNum.style("opacity", 0)
+ 		 }
+
+	}
+
 })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
