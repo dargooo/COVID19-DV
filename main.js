@@ -20,6 +20,7 @@
 		console.log("return");
 		d3.select("#main").selectAll("*").remove();
 		$("#line-state").show();
+		$("#bar-state").hide();
         $("#focus-text").show();
         $("#lines").show();
         $("#bar").show();
@@ -233,9 +234,11 @@
 		var svg_main = d3.select("#main"); 
 		svg_main.selectAll("*").remove();
 		$("#line-state").hide();
+		$("#bar-state").show();
 		$("#focus-text").hide();
 		$("#lines").hide();
 		$("#bar").hide();
+		d3.select("#bar-state").html(state);
 		var cur_data = counties_data.filter(function(d) { return d.state == state; })
 
 		console.log(d3.max(cur_data, function(d) { return parseInt(d.cases); }));
@@ -259,6 +262,7 @@
             .on('mousemove', function(d) { mousemove(d.cases, xx(d.county), yy(d.cases), xx.bandwidth()); })
             .on('mouseout', mouseout);
 	
+		// real
 		svg_main.append("g")
 		    .attr("transform", "translate(" + left + "," + up + ")")
 		    .selectAll("rect").data(cur_data)
