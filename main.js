@@ -108,6 +108,7 @@
     function renderMap() {
 		$("#anno-1").show();
 		$("#anno-2").hide();
+		$("#btn-home").hide();
 
 		var n1 = 1000, n2 = 10000, n3 = 50000, n4 = 150000, n5 = maxCase;
 		var p1 = "#E7DBF3", p2 = "#C7B2DE", p3 = "#9779B7", p4 = "#4B2D69",  p5 = "#16002C";
@@ -150,7 +151,7 @@
 		d3.json("https://d3js.org/us-10m.v1.json").then(function(us) {
 			var still = false;
 		  	svg_main.append("g")
-		  	  	.attr("transform", "translate(150,0)")
+		  	  	.attr("transform", "translate(20,0)")
 		  	  	.selectAll("path")
 		  	  	.data(topojson.feature(us, us.objects.states).features)
 		  	  	.enter().append("path")
@@ -183,7 +184,7 @@
 						d3.select("#btn-county").on('click', function() {renderBar(state);}).text(state + " Counties >>");
 
 						var rect = d3.select("#" + stateMap.get(state)[0].substring(1));
-						d3.select("#arrow").style("top", (62 + parseInt(rect.attr("y"))) + "px");
+						d3.select("#arrow").style("top", (78 + parseInt(rect.attr("y"))) + "px");
 		  	        	$("#arrow").show();
 		  	        	$("#tooltip").show();
 		
@@ -225,7 +226,7 @@
 					curSelect = $(this);
 		  	    });
 
-			  	svg_main.append("path").attr("transform", "translate(150,0)")
+			  	svg_main.append("path").attr("transform", "translate(20,0)")
 					.attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; })))
       				.attr("class", "state-border");
 
@@ -253,6 +254,7 @@
 		$("#bar-state").show();
 		$("#anno-1").hide();
 		$("#anno-2").show();
+		$("#btn-home").show();
 		$("#focus-text").hide();
 		$("#lines").hide();
 		$("#bar").hide();

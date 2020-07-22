@@ -19,14 +19,14 @@
 </head> 
  <body>
 	<h1 style="font-family:Comic Sans MS, Comic Sans, cursive; top:0px; left:100px; position:relative; text-align:center">COVID-19 US Cases Summary</h1>
-	<svg id="main" width="1450" height="1200" style="top:80px; position:absolute"></svg>
-	<svg id="bar" width="100" height="1200" style="left:5px; position:absolute;"></svg>
-	<div id="arrow" style="display:none; left:70px; position:absolute;">
-		<span style='font-size:50px;color:#9FC738;'>&#8592;</span>
+	<svg id="main" width="1450" height="1200" style="top:70px; position:absolute"></svg>
+	<svg id="bar" width="100" height="1200" style="left:1360px; position:absolute;"></svg>
+	<div id="arrow" style="display:none; left:1425px; position:absolute;">
+		<span style='font-size:22px;color:#9FC738;'>&#9672;</span>
 	</div>
 	<div id="line-state" style="left:560px; top:780px; position:absolute; width:200px; text-align:left"></div>
 	<div id="focus-text" style="opacity:0; left:560px; top:810px; position:absolute; width:200px; font-size:15px;  text-align:left"></div>
-	<svg id="lines" width="900" height="275" style="left:550px; top:600px;  position:absolute; z-index:0"></svg>
+	<svg id="lines" width="900" height="275" style="left:400px; top:600px;  position:absolute; z-index:0"></svg>
 	
 	<div id="tooltip">
 		<div id="tip-state" style="font-weight:600;">Alabama</div>
@@ -37,17 +37,21 @@
 		</div>
 	</div>
 	
-	<div id="anno-1" style="font-size:16px; top:270px; left:1150px; width:280px; position:absolute; z-index:-1;">
+	<div id="anno-1" style="font-size:16px; top:270px; left:1000px; width:280px; position:absolute; z-index:-1;">
 		&bull; This map shows daily updated COVID-19 cases reported by U.S. states. </br>
 		&bull; Hover over the maps to see: </br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- A tooltip with the number of cases and deaths in each state; </br> 
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- A line chart showing the growth of cases and deaths in each state; </br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- The rank of cases in each state among the U.S. </br> 
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- A line chart showing the growth of cases and deaths in each state; </br>
 		&bull; Hover over the line chart to see the cases in each day. </br>
 		&bull; Click the maps and then click on the button showing up on the tooltip to see number of cases in each county in a state. </br>
 	</div>
+	<div style="color:#e4e3e3; font-weight:800; font-size:90px; top:333px; left:1240px; position:absolute; z-index:-2;">&#8594;</div>
+	<div style="color:#e4e3e3; font-weight:500; font-size:104px; top:410px; left:1208px; position:absolute; z-index:-2;">|</div>
+	<div style="color:#e4e3e3; font-weight:800; font-size:90px; top:480px; left:1189px; position:absolute; z-index:-2;">&#8595;</div>
+
 	<div style="left:5px; top:3px; position:absolute;">
-		<button id="btn-home" class="button-fancy">&lt;&lt;&nbsp;&nbsp;Return to Map</button>
+		<button id="btn-home" class="button-fancy" style="display:none;">&lt;&lt;&nbsp;&nbsp;Return to Map</button>
 	</div>
 	<div id="bar-state" style="font-family:Comic Sans MS, Comic Sans, cursive; left:600px; top:830px; position:absolute; width:200px; text-align:right; font-size:28px"></div>
 	<div id="anno-2" style="font-size:16px; top:900px; left:500px; position:absolute; ">
