@@ -29,18 +29,30 @@
 	<svg id="lines" width="900" height="275" style="left:550px; top:600px;  position:absolute; z-index:0"></svg>
 	
 	<div id="tooltip">
-		<div id="tip-state">Alabama</div>
+		<div id="tip-state" style="font-weight:600;">Alabama</div>
 		<div id="tip-case">Confirmed: 12461</div>
 		<div id="tip-death">Deaths: 12461</div>
 		<div>
-			<button id="btn-county" style="display:none">&gt;&gt; Details of Alabama Counties</button>
+			<button id="btn-county" class="button-fancy" style="display:none; font-size:15px;">Details of Alabama Counties&nbsp;&nbsp;&gt;&gt;</button>
 		</div>
 	</div>
 	
-	<div style="left:5px; top:10px; position:absolute;">
-		<button id="btn-home" style="">&lt;&lt;  Return to Map</button>
+	<div id="anno-1" style="font-size:16px; top:270px; left:1150px; width:280px; position:absolute; z-index:-1;">
+		&bull; This map shows daily updated COVID-19 cases reported by U.S. states. </br>
+		&bull; Hover over the maps to see: </br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- A tooltip with the number of cases and deaths in each state; </br> 
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- A line chart showing the growth of cases and deaths in each state; </br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- The rank of cases in each state among the U.S. </br> 
+		&bull; Hover over the line chart to see the cases in each day. </br>
+		&bull; Click the maps and then click on the button showing up on the tooltip to see number of cases in each county in a state. </br>
 	</div>
-	<div id="bar-state" style="left:600px; top:830px; position:absolute; width:200px; text-align:right; font-size:28px"></div>
+	<div style="left:5px; top:3px; position:absolute;">
+		<button id="btn-home" class="button-fancy">&lt;&lt;&nbsp;&nbsp;Return to Map</button>
+	</div>
+	<div id="bar-state" style="font-family:Comic Sans MS, Comic Sans, cursive; left:600px; top:830px; position:absolute; width:200px; text-align:right; font-size:28px"></div>
+	<div id="anno-2" style="font-size:16px; top:900px; left:500px; position:absolute; ">
+		Hover over each bar to see the county name and specific cases number.
+	</div>
 
 	<script async type="text/javascript" src="main.js"></script>
 </body>
