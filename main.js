@@ -151,7 +151,6 @@
 			var still = false;
 		  	svg_main.append("g")
 		  	  	.attr("transform", "translate(150,0)")
-		  	  	.attr("class", "states-choropleth")
 		  	  	.selectAll("path")
 		  	  	.data(topojson.feature(us, us.objects.states).features)
 		  	  	.enter().append("path")
