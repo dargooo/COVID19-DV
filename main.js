@@ -99,6 +99,45 @@
 			.call(d3.axisBottom(x))
 			.style("stroke-width",2).style("font-size","15px");
 		svg_line.append("g").attr("transform", "translate(810,0)").call(d3.axisRight(y)).style("stroke-width",2).style("font-size","12px");
+
+		// growth
+		var n = cur_data.length, days = 40, i = parseInt(n/2), k = n - days;
+		console.log("i=" + i + ", k=" + k);
+		var r1 = 0, r2 = 0;
+		for (var j = 0; j < days; j++) {
+			var c1 = cur_data[i+j].cases, c2 = cur_data[i+j-1].cases;
+			r1 += (c1 - c2) / c2;
+			var c3 = cur_data[k+j].cases, c4 = cur_data[k+j-1].cases;
+			r2 += (c3 - c4) / c4;
+			console.log("c1=" + c1 + ", c2=" + c2 + ", c3=" + c3 + ", c4=" + c4);
+		}
+		r1 = (r1 / days).toFixed(3);
+		r2 = (r2 / days).toFixed(3);
+		console.log("r1=" + r1 + ", r2=" + r2);
+
+		var x1 = x(parseTime(cur_data[i].date));
+		var y1 = y(cur_data[i].cases);
+		var x2 = x(parseTime(cur_data[k + days - 10].date));
+		var y2 = y(cur_data[k + days - 10].cases);
+			console.log("x1=" + x1 + ", x2=" + x2 + ", y1=" + y1 + ", y2=" + y2);
+		var svg_grow = svg_line.append('g');
+		svg_grow.append('line').attr("x1", x1).attr("y1", y1).attr("x2", x2).attr("y2", y2)
+				.style("stroke", "#0000004f")
+    			.style("stroke-width", 1.5)
+			console.log("c1=" + c1 + ", c2=" + c2 + ", c3=" + c3 + ", c4=" + c4);
+
+		svg_grow.append('circle').attr("cx", x1).attr("cy", y1).attr("r", 3)
+		svg_grow.append('circle').attr("cx", x2).attr("cy", y2).attr("r", 3)
+		svg_grow.append('text').attr("x", x1 - 5).attr("y", y1 - 5).text("avg.rate:" + r1).attr('text-anchor', 'middle').style("font-size", "13px");
+		svg_grow.append('text').attr("x", x2 + 5).attr("y", y2 - 5).text("avg.rate:" + r2).attr('text-anchor', 'middle').style("font-size", "13px");
+		var ar = "\u2191";
+		if (r1 == r2) ar = "-";
+		else if (r1 > r2) ar = "\u2193";
+		svg_grow.append('text').attr("x", (x1+x2)/2).attr("y", (y1+y2)/2 - 10)
+				.text("Growth rate " + ar)
+				.style("background-color", "red")
+				.attr('text-anchor', 'middle');
+
 	}
 
 
