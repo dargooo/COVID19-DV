@@ -52,9 +52,9 @@
   background-color: #E9FFD8;
   opacity: 0.75;
   padding: 16px;
-  border: 1.5px dashed;
+  border: 2px dashed;
   display: none;
-  width: 250px;
+  width: 230px;
 }
 
 .switchBTN {
@@ -98,4 +98,27 @@
   stroke-linejoin: round;
   stroke-linecap: round;
   pointer-events: none;
+}
+
+.button-fancy {
+    color: #000000;
+    border: #000000 solid 1.5px;
+    padding: 7px 17px;
+	margin: 10px 0 0 0;
+    background-color: #ffffff;
+	border-radius: 4px;
+	font-size:16px;
+}
+
+.button-fancy:hover {
+    color: #ffffff;
+    background-color: #000000;
+}
+.axis {
+	color: #5B5B5B;
+}	
+.hover-axis {
+	font-size: 22px;
+    font-weight: 800;
+    color: black;
 }
