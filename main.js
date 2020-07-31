@@ -39,8 +39,9 @@
 		svg_line.selectAll("g").remove();
 		svg_line.selectAll("rect").remove();
 
+		var max = d3.max(states_data, function(d) { return parseInt(d.cases); });
 		var x = d3.scaleTime().rangeRound([0, 800]).domain(d3.extent(states_data, function(d){ return parseTime(d.date); }));
-		var y = d3.scaleLinear().domain([0,430000]).range([250,0]);
+		var y = d3.scaleLinear().domain([0, max]).range([250,0]);
 		var lineCase = d3.line().x(function(d, i) { return x(parseTime(d.date)); }).y(function(d) { return y(parseInt(d.cases)); });
 		var lineDeath = d3.line().x(function(d, i) { return x(parseTime(d.date)); }).y(function(d) { return y(parseInt(d.deaths)); });
 
@@ -109,11 +110,9 @@
 			r1 += (c1 - c2) / c2;
 			var c3 = cur_data[k+j].cases, c4 = cur_data[k+j-1].cases;
 			r2 += (c3 - c4) / c4;
-			console.log("c1=" + c1 + ", c2=" + c2 + ", c3=" + c3 + ", c4=" + c4);
 		}
 		r1 = (r1 / days).toFixed(3);
 		r2 = (r2 / days).toFixed(3);
-		console.log("r1=" + r1 + ", r2=" + r2);
 
 		var x1 = x(parseTime(cur_data[i].date));
 		var y1 = y(cur_data[i].cases);
